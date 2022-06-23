@@ -21,6 +21,8 @@ func Authentication(userService *user.UserService) gin.HandlerFunc {
 				"message": "not authorize",
 			})
 			c.Abort()
+
+			return
 		}
 
 		if !strings.HasPrefix(authHeader, bearer) {
@@ -28,6 +30,8 @@ func Authentication(userService *user.UserService) gin.HandlerFunc {
 				"message": "not authorize",
 			})
 			c.Abort()
+
+			return
 		}
 
 		auths := strings.Split(authHeader, " ") // will result []string{"Bearer", "{token}"}
@@ -38,6 +42,8 @@ func Authentication(userService *user.UserService) gin.HandlerFunc {
 				"message": "not authorize",
 			})
 			c.Abort()
+
+			return
 		}
 		ctxUserID := context.WithValue(c.Request.Context(), "user_id", data["user_id"])
 		c.Request = c.Request.WithContext(ctxUserID)
