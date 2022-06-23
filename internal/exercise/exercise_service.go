@@ -83,3 +83,44 @@ func (ex ExerciseService) GetUserScore(ctx *gin.Context) {
 		"score": score,
 	})
 }
+
+func (ex ExerciseService) CreateExcercise(ctx *gin.Context) {
+	var excercise domain.Exercise
+	err := ctx.ShouldBind(&excercise)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": "invalid input",
+		})
+
+		return
+	}
+
+	if excercise.Title == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field title required",
+		})
+
+		return
+	}
+
+	if excercise.Description == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field description required",
+		})
+
+		return
+	}
+
+	if err :=
+		ex.db.Create(&excercise).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "failed when creating excercise",
+		})
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"result": &excercise,
+	})
+}

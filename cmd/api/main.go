@@ -20,12 +20,15 @@ func main() {
 	db := database.NewDatabaseConn()
 	exerciseService := exercise.NewExerciseService(db)
 	userService := user.NewUserService(db)
+
 	// exercises
 	route.GET("/exercises/:id", middleware.Authentication(userService), exerciseService.GetExercise)
 	route.GET("/exercises/:id/score", middleware.Authentication(userService), exerciseService.GetUserScore)
 
+	route.POST("/excercises", middleware.Authentication(userService), exerciseService.CreateExcercise)
+
 	// user
 	route.POST("/register", userService.Register)
 	route.POST("/login", userService.Login)
-	route.Run(":8000")
+	route.Run(":8080")
 }
