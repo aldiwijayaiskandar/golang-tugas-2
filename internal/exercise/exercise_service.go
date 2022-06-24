@@ -124,3 +124,89 @@ func (ex ExerciseService) CreateExcercise(ctx *gin.Context) {
 		"result": &excercise,
 	})
 }
+
+func (ex ExerciseService) CreateQuestion(ctx *gin.Context) {
+
+	var question domain.Question
+
+	question.CreatorID = int(ctx.Request.Context().Value("user_id").(float64))
+
+	err := ctx.ShouldBind(&question)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": "invalid input",
+		})
+
+		return
+	}
+
+	if question.ExerciseID == 0 {
+		ctx.JSON(400, gin.H{
+			"message": "field ExerciseID is required",
+		})
+
+		return
+	}
+	if question.Body == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field Body is required",
+		})
+
+		return
+	}
+	if question.OptionA == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field OptionA is required",
+		})
+
+		return
+	}
+	if question.OptionB == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field OptionB is required",
+		})
+
+		return
+	}
+	if question.OptionC == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field OptionC is required",
+		})
+
+		return
+	}
+	if question.OptionD == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field OptionD is required",
+		})
+
+		return
+	}
+	if question.CorrectAnswer == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field CorrectAnswer is required",
+		})
+
+		return
+	}
+	if question.Score == 0 {
+		ctx.JSON(400, gin.H{
+			"message": "field Score is required",
+		})
+
+		return
+	}
+
+	if err := ex.db.Create(&question).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "failed when creating question",
+		})
+
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"result": &question,
+	})
+}

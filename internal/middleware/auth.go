@@ -13,6 +13,8 @@ const (
 	bearer = "Bearer "
 )
 
+type contextKey string
+
 func Authentication(userService *user.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

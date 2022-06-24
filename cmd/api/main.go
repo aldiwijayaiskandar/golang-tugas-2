@@ -27,6 +27,9 @@ func main() {
 
 	route.POST("/excercises", middleware.Authentication(userService), exerciseService.CreateExcercise)
 
+	// question
+	route.POST("/question", middleware.Authentication(userService), exerciseService.CreateQuestion)
+
 	// user
 	route.POST("/register", userService.Register)
 	route.POST("/login", userService.Login)
