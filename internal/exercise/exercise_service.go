@@ -210,3 +210,56 @@ func (ex ExerciseService) CreateQuestion(ctx *gin.Context) {
 		"result": &question,
 	})
 }
+
+func (ex *ExerciseService) CreateAnswer(ctx *gin.Context) {
+	var answer domain.Answer
+
+	answer.UserID = int(ctx.Request.Context().Value("user_id").(float64))
+
+	err := ctx.ShouldBind(&answer)
+
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": "invalid input",
+		})
+
+		return
+	}
+
+	if answer.Answer == "" {
+		ctx.JSON(400, gin.H{
+			"message": "field answer required",
+		})
+
+		return
+	}
+
+	if answer.QuestionID == 0 {
+		ctx.JSON(400, gin.H{
+			"message": "field question_id required",
+		})
+
+		return
+	}
+
+	if answer.ExerciseID == 0 {
+		ctx.JSON(400, gin.H{
+			"message": "field excecise_id required",
+		})
+
+		return
+	}
+
+	if err :=
+		ex.db.Create(&answer).Error; err != nil {
+		ctx.JSON(500, gin.H{
+			"message": "failed when creating answer ",
+		})
+
+		return
+	}
+
+	ctx.JSON(201, gin.H{
+		"result": &answer,
+	})
+}

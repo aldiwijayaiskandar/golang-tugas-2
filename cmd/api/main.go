@@ -21,6 +21,9 @@ func main() {
 	exerciseService := exercise.NewExerciseService(db)
 	userService := user.NewUserService(db)
 
+	// answer
+	route.POST("/answer", middleware.Authentication(userService), exerciseService.CreateAnswer)
+
 	// exercises
 	route.GET("/exercises/:id", middleware.Authentication(userService), exerciseService.GetExercise)
 	route.GET("/exercises/:id/score", middleware.Authentication(userService), exerciseService.GetUserScore)
